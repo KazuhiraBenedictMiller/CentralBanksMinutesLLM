@@ -17,6 +17,7 @@ pypdf = "^3.16.2"
 sentence-transformers = "^2.2.2"
 torch = ">=2.0.0, !=2.0.1"
 replicate = "^0.13.0"
+beautifulsoup4 = "^4.12.2"
 
 [build-system]
 requires = ["poetry-core"]
