@@ -30,7 +30,7 @@ def FetchDataForYear(Links):
         File_Path = paths.TRANSFORMED_DATA_DIR / f'{x["Title"]}.txt'
 
         if not File_Path.exists():
-            with open (File_Path, "w") as f:
+            with open (File_Path, "w", encoding = "utf-8") as f:
                 f.write('\n'.join(Text))
     
 
