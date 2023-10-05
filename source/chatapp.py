@@ -49,7 +49,8 @@ with st.sidebar:
     
     Temperature = st.sidebar.slider("Temperature", min_value = 0.01, max_value = 5.0, value = 0.1, step = 0.01)
     TopP = st.sidebar.slider("Top P", min_value = 0.01, max_value = 1.0, value = 0.9, step = 0.01)
-    MaxLength = st.sidebar.slider('Max Length', min_value= 32, max_value=128, value=120, step = 10)
+    MaxLength = st.sidebar.slider('Max Length', min_value = 10, max_value = 5000, value = 100, step = 10)
+    
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
 '''
 # Store LLM generated responses
