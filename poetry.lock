@@ -879,16 +879,6 @@ trio = ["trio (>=0.14,<0.23)"]
 wmi = ["wmi (>=1.5.1,<2.0.0)"]
 
 [[package]]
-name = "dotenv-python"
-version = "0.0.1"
-description = "Read .env(-ish) configuration file for python web applications."
-optional = false
-python-versions = "*"
-files = [
-    {file = "dotenv-python-0.0.1.zip", hash = "sha256:362e170ca8fd69a70c1aca1fda2ddad0ac270e161e81e59f4039ec11decc14fa"},
-]
-
-[[package]]
 name = "exceptiongroup"
 version = "1.1.3"
 description = "Backport of PEP 654 (exception groups)"
@@ -5353,4 +5343,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "b9b3d5795b0a7f83f896dc1cabb8b308258a0f34d98961a1d3f3c0b90bdeade5"
+content-hash = "215c81bf4d72906adc584ecaaff6d13b9af8bc752f47c6525ebb5a49350bc512"
