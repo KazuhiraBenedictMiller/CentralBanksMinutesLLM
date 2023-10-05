@@ -47,12 +47,12 @@ with st.sidebar:
     
     LLM = config.LLAMA2_13B
     
-    Temperature = st.sidebar.slider("Temperature", min_value = 0.01, max_value = 5.0, value = 0.1, step = 0.01)
-    TopP = st.sidebar.slider("Top P", min_value = 0.01, max_value = 1.0, value = 0.9, step = 0.01)
-    MaxLength = st.sidebar.slider('Max Length', min_value = 10, max_value = 5000, value = 100, step = 10)
+    Temperature = st.sidebar.slider("Temperature", min_value = 0.01, max_value = 5.0, value = 0.75, step = 0.01)
+    TopP = st.sidebar.slider("Top P", min_value = 0.01, max_value = 1.0, value = 0.75, step = 0.01)
+    MaxLength = st.sidebar.slider('Max Length', min_value = 10, max_value = 5000, value = 3000, step = 10)
     
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
-'''
+
 # Store LLM generated responses
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [{"role": "assistant", "content": "How may I assist you today?"}]
@@ -61,7 +61,7 @@ if "messages" not in st.session_state.keys():
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
-
+'''
 def clear_chat_history():
     st.session_state.messages = [{"role": "assistant", "content": "How may I assist you today?"}]
 st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
