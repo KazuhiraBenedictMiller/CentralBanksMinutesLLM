@@ -18,6 +18,9 @@ sentence-transformers = "^2.2.2"
 torch = ">=2.0.0, !=2.0.1"
 replicate = "^0.13.0"
 beautifulsoup4 = "^4.12.2"
+openai = "^0.28.1"
+fpdf = "^1.7.2"
+streamlit = "^1.27.2"
 
 [build-system]
 requires = ["poetry-core"]
