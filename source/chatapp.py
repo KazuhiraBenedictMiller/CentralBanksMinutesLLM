@@ -16,6 +16,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.chains import ConversationalRetrievalChain
 
 import streamlit as st
+import replicate
 
 #App title
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
@@ -63,41 +64,58 @@ for message in st.session_state.messages:
         st.write(message["content"])
 
 def clear_chat_history():
-    st.session_state.messages = [{"role": "Qssistant", "content": "Welcome to Llama 2 LLM to Chat with RBA's Monetary Policy Meeting Minutes. How may I assist you today?"}]
+    st.session_state.messages = [{"role": "Assistant", "content": "Welcome to Llama 2 LLM to Chat with RBA's Monetary Policy Meeting Minutes. How may I assist you today?"}]
     
 st.sidebar.button("Clear Chat History", on_click = clear_chat_history)
-'''
+
 # Function for generating LLaMA2 response. Refactored from https://github.com/a16z-infra/llama2-chatbot
-def generate_llama2_response(prompt_input):
-    string_dialogue = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as 'Assistant'."
+def generate_llama2_response(PromptInput):
+    
+    StringDialogue = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as 'Assistant'."
+    
     for dict_message in st.session_state.messages:
-        if dict_message["role"] == "user":
-            string_dialogue += "User: " + dict_message["content"] + "\n\n"
+        
+        if dict_message["role"] == "User":
+            
+            StringDialogue += "User: " + dict_message["content"] + "\n\n"
+            
         else:
-            string_dialogue += "Assistant: " + dict_message["content"] + "\n\n"
-    output = replicate.run('a16z-infra/llama13b-v2-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5', 
-                           input={"prompt": f"{string_dialogue} {prompt_input} Assistant: ",
-                                  "temperature":temperature, "top_p":top_p, "max_length":max_length, "repetition_penalty":1})
+            
+            StringDialogue += "Assistant: " + dict_message["content"] + "\n\n"
+            
+    output = replicate.run(config.LLAMA2_13B, 
+                           input={"prompt": f"{StringDialogue} {PromptInput} Assistant: ",
+                                  "temperature": Temperature, "top_p": TopP, "max_length": MaxLength, "repetition_penalty": 1})
     return output
 
 # User-provided prompt
-if prompt := st.chat_input(disabled=not replicate_api):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.write(prompt)
+if Prompt := st.chat_input(disabled = not Replicate_API):
+    
+    st.session_state.messages.append({"role": "User", "content": Prompt})
+    
+    with st.chat_message("User"):
+        
+        st.write(Prompt)
 
 # Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] != "assistant":
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            response = generate_llama2_response(prompt)
-            placeholder = st.empty()
-            full_response = ''
-            for item in response:
-                full_response += item
-                placeholder.markdown(full_response)
-            placeholder.markdown(full_response)
-    message = {"role": "assistant", "content": full_response}
-    st.session_state.messages.append(message)
+if st.session_state.messages[-1]["role"] != "Assistant":
     
-'''
+    with st.chat_message("Assistant"):
+        
+        with st.spinner("Thinking..."):
+            
+            Response = generate_llama2_response(Prompt)
+            Placeholder = st.empty()
+            FullResponse = ''
+            
+            for item in Response:
+                
+                FullResponse += item
+                Placeholder.markdown(FullResponse)
+                
+            Placeholder.markdown(FullResponse)
+            
+    Message = {"role": "assistant", "content": FullResponse}
+    
+    st.session_state.messages.append(Message)
+    
