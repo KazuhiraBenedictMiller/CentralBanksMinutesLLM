@@ -1,7 +1,7 @@
 import os
 import sys
 
-from dotenv import load_dotenv
+from dotenv imp
 load_dotenv("../.env")
 
 REPLICATE_API_TOKEN = os.environ["REPLICATE_API_TOKEN"]
