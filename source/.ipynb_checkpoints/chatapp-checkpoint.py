@@ -59,8 +59,12 @@ with st.sidebar:
     MaxLength = st.sidebar.slider('Max Length', min_value = 10, max_value = 5000, value = 3000, step = 10)
     
     StartYear = st.selectbox(
-    "Select the Starting Year for the Meeting Minutes to be Fetched:",
-    range(2006, datetime.now().year))
+    "Select the Start Year for the Meeting Minutes to be Fetched:",
+    range(2006, datetime.now().year+1))
+    
+    EndYear = st.selectbox(
+    "Select the End Start Year for the Meeting Minutes to be Fetched:",
+    range(StartYear, datetime.now().year+1))
     
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
 
