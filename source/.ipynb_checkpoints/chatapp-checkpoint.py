@@ -4,6 +4,10 @@ import sys
 sys.path.append("../source/")
 sys.path.append("../")
 
+from dotenv import load_dotenv
+
+load_dotenv("../.env")
+
 import paths
 import config
 import webscraper
@@ -17,6 +21,8 @@ from langchain.chains import ConversationalRetrievalChain
 
 import streamlit as st
 import replicate
+
+from datetime import datetime
 
 #App title
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
@@ -52,11 +58,15 @@ with st.sidebar:
     TopP = st.sidebar.slider("Top P", min_value = 0.01, max_value = 1.0, value = 0.75, step = 0.01)
     MaxLength = st.sidebar.slider('Max Length', min_value = 10, max_value = 5000, value = 3000, step = 10)
     
+    StartYear = st.selectbox(
+    "Select the Starting Year for the Meeting Minutes to be Fetched:",
+    range(2006, datetime.now().year))
+    
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
 
 # Store LLM generated responses
 if "messages" not in st.session_state.keys():
-    st.session_state.messages = [{"role": "Assistant", "content": "Welcome to Llama 2 LLM to Chat with RBA's Monetary Policy Meeting Minutes. How may I assist you today?"}]
+    st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
 
 # Display or clear chat messages
 for message in st.session_state.messages:
@@ -64,7 +74,7 @@ for message in st.session_state.messages:
         st.write(message["content"])
 
 def clear_chat_history():
-    st.session_state.messages = [{"role": "Assistant", "content": "Welcome to Llama 2 LLM to Chat with RBA's Monetary Policy Meeting Minutes. How may I assist you today?"}]
+    st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
     
 st.sidebar.button("Clear Chat History", on_click = clear_chat_history)
 

@@ -11,7 +11,6 @@ pinecone-client = "^2.2.4"
 langchain = "^0.0.305"
 jupyter = "^1.0.0"
 lab = "^7.4"
-python-dotenv = "^1.0.0"
 pypdf = "^3.16.2"
 sentence-transformers = "^2.2.2"
 torch = ">=2.0.0, !=2.0.1"
@@ -20,6 +19,7 @@ beautifulsoup4 = "^4.12.2"
 openai = "^0.28.1"
 fpdf = "^1.7.2"
 streamlit = "^1.27.2"
+python-dotenv = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core"]

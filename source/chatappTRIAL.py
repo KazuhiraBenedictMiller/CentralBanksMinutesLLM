@@ -4,10 +4,6 @@ import sys
 sys.path.append("../source/")
 sys.path.append("../")
 
-from dotenv import load_dotenv
-
-load_dotenv("../.env")
-
 import paths
 import config
 import webscraper
@@ -21,8 +17,6 @@ from langchain.chains import ConversationalRetrievalChain
 
 import streamlit as st
 import replicate
-
-from datetime import datetime
 
 #App title
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
@@ -57,10 +51,6 @@ with st.sidebar:
     Temperature = st.sidebar.slider("Temperature", min_value = 0.01, max_value = 5.0, value = 0.75, step = 0.01)
     TopP = st.sidebar.slider("Top P", min_value = 0.01, max_value = 1.0, value = 0.75, step = 0.01)
     MaxLength = st.sidebar.slider('Max Length', min_value = 10, max_value = 5000, value = 3000, step = 10)
-    
-    StartYear = st.selectbox(
-    "Select the Starting Year for the Meeting Minutes to be Fetched:",
-    range(2006, datetime.now().year))
     
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
 
