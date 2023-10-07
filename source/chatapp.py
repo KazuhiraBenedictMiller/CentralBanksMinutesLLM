@@ -83,16 +83,15 @@ else:
 finally:
     
     try:
-    Embeddings = HuggingFaceEmbeddings()    
+        Embeddings = HuggingFaceEmbeddings()    
 
-    VectorDB = Pinecone.from_existing_index(config.PINECONE_INDEX_NAME, Embeddings)
+        VectorDB = Pinecone.from_existing_index(config.PINECONE_INDEX_NAME, Embeddings)
     
-    Warning = st.warning("Retrieving Vectors from the Vector Store...")
+        Warning = st.warning("Retrieving Vectors from the Vector Store...")
     
-    x+x
+        x+x
     
     except:
-        
         Warning.empty()
     
         st.error("An Error occurred when trying to retreive Data from the Vector Store!!")
