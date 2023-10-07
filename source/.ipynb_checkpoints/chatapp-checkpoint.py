@@ -89,8 +89,6 @@ finally:
     
         Warning = st.warning("Retrieving Vectors from the Vector Store...")
     
-        x+x
-    
     except:
         Warning.empty()
     
