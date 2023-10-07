@@ -31,7 +31,7 @@ try:
     x + x
     
 except:
-    st.write("Something went Wrong with Connecting to the Vectore Database!!")
+    st.text("Something went Wrong with Connecting to the Vectore Database!!")
 
 #Replicate Credentials
 with st.sidebar:
