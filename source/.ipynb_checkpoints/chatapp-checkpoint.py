@@ -34,6 +34,9 @@ try:
     
 except:
     st.error("Something went wrong with Connecting to the Vectore Database!!")
+    
+else:
+    st.success("Connected to the Vector Store!!")
 
 #Replicate Credentials
 with st.sidebar:
@@ -76,69 +79,79 @@ with st.sidebar:
     
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
 
-#Store LLM generated responses
-if "messages" not in st.session_state.keys():
-    st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
+try:
+    Embeddings = HuggingFaceEmbeddings()    
 
-#Display or clear chat messages
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
+    VectorDB = Pinecone.from_existing_index(config.PINECONE_INDEX_NAME, Embeddings)
+    
+except:
+    st.error("An Error occurred when trying to retreive Data from the Vector Store!!")
+    
+else:
+    
+    #Store LLM generated responses
+    if "messages" not in st.session_state.keys():
+        st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
 
-def clear_chat_history():
-    st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
-    
-st.sidebar.button("Clear Chat History", on_click = clear_chat_history)
+    #Display or clear chat messages
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
 
-#Function for generating LLaMA2 response. Refactored from https://github.com/a16z-infra/llama2-chatbot
-def generate_llama2_response(PromptInput):
-    
-    StringDialogue = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as 'Assistant'."
-    
-    for dict_message in st.session_state.messages:
-        
-        if dict_message["role"] == "User":
-            
-            StringDialogue += "User: " + dict_message["content"] + "\n\n"
-            
-        else:
-            
-            StringDialogue += "Assistant: " + dict_message["content"] + "\n\n"
-            
-    output = replicate.run(config.LLAMA2_13B, 
-                           input={"prompt": f"{StringDialogue} {PromptInput} Assistant: ",
-                                  "temperature": Temperature, "top_p": TopP, "max_length": MaxLength, "repetition_penalty": 1})
-    return output
+    def clear_chat_history():
+        st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
 
-# User-provided prompt
-if Prompt := st.chat_input(disabled = not Replicate_API):
-    
-    st.session_state.messages.append({"role": "User", "content": Prompt})
-    
-    with st.chat_message("User"):
-        
-        st.write(Prompt)
+    st.sidebar.button("Clear Chat History", on_click = clear_chat_history)
 
-# Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] != "Assistant":
-    
-    with st.chat_message("Assistant"):
-        
-        with st.spinner("Thinking..."):
-            
-            Response = generate_llama2_response(Prompt)
-            Placeholder = st.empty()
-            FullResponse = ''
-            
-            for item in Response:
-                
-                FullResponse += item
+    #Function for generating LLaMA2 response. Refactored from https://github.com/a16z-infra/llama2-chatbot
+    def generate_llama2_response(PromptInput):
+
+        StringDialogue = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as 'Assistant'."
+
+        for dict_message in st.session_state.messages:
+
+            if dict_message["role"] == "User":
+
+                StringDialogue += "User: " + dict_message["content"] + "\n\n"
+
+            else:
+
+                StringDialogue += "Assistant: " + dict_message["content"] + "\n\n"
+
+        output = replicate.run(config.LLAMA2_13B, 
+                               input={"prompt": f"{StringDialogue} {PromptInput} Assistant: ",
+                                      "temperature": Temperature, "top_p": TopP, "max_length": MaxLength, "repetition_penalty": 1})
+        return output
+
+    # User-provided prompt
+    if Prompt := st.chat_input(disabled = not Replicate_API):
+
+        st.session_state.messages.append({"role": "User", "content": Prompt})
+
+        with st.chat_message("User"):
+
+            st.write(Prompt)
+
+    # Generate a new response if last message is not from assistant
+    if st.session_state.messages[-1]["role"] != "Assistant":
+
+        with st.chat_message("Assistant"):
+
+            with st.spinner("Thinking..."):
+
+                Response = generate_llama2_response(Prompt)
+                Placeholder = st.empty()
+                FullResponse = ''
+
+                for item in Response:
+
+                    FullResponse += item
+                    Placeholder.markdown(FullResponse)
+
                 Placeholder.markdown(FullResponse)
-                
-            Placeholder.markdown(FullResponse)
-            
-    Message = {"role": "assistant", "content": FullResponse}
-    
-    st.session_state.messages.append(Message)
-    
-    
+
+        Message = {"role": "assistant", "content": FullResponse}
+
+        st.session_state.messages.append(Message)
+
+
