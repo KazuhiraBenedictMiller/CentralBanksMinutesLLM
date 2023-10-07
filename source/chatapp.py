@@ -28,16 +28,7 @@ from datetime import datetime
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
 st.title("🦙💬 Chat with RBA's 🏦 Monetary Policy Meeting Minutes")
 
-#Connecting to the VectorStore
-try:
-    pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
-    
-except:
-    st.error("Something went wrong with Connecting to the Vectore Database!!")
-    
-else:
-    st.success("Connected to the Vector Store!!")
-
+#Sidebar
 #Replicate Credentials
 with st.sidebar:
     st.title("🦙💬 Llama 2 RBA Meeting Minutes Chatbot")
@@ -79,6 +70,21 @@ with st.sidebar:
     
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
 
+#Connecting to the VectorStore
+try:
+    pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
+    
+except:
+    st.error("Something went wrong with Connecting to the Vectore Database!!")
+    
+else:
+    st.success("Connected to the Vector Store!!")    
+
+finally:
+    st.success("finally")
+    
+    
+    
 try:
     #Embeddings = HuggingFaceEmbeddings()    
 
