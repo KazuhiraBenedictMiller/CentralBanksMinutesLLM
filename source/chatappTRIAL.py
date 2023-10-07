@@ -118,4 +118,3 @@ if st.session_state.messages[-1]["role"] != "Assistant":
     Message = {"role": "assistant", "content": FullResponse}
     
     st.session_state.messages.append(Message)
-    
