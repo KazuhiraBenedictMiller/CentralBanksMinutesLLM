@@ -117,7 +117,7 @@ finally:
         
         time.sleep(3)
         
-        Success1.empy()
+        Success1.empty()
         Success2.empty()
         
     finally:
