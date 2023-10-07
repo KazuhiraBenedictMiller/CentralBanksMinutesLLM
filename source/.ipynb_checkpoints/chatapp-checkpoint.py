@@ -26,13 +26,13 @@ from datetime import datetime
 
 #App title
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
-st.title("🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
+st.title("🦙💬 Chat with RBA's 🏦 Monetary Policy Meeting Minutes")
 
 try:
     x + x
     
 except:
-    st.text("Something went Wrong with Connecting to the Vectore Database!!")
+    st.error("Something went Wrong with Connecting to the Vectore Database!!")
 
 #Replicate Credentials
 with st.sidebar:
