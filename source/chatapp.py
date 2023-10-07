@@ -28,11 +28,12 @@ from datetime import datetime
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
 st.title("🦙💬 Chat with RBA's 🏦 Monetary Policy Meeting Minutes")
 
+#Connecting to the VectorStore
 try:
-    x + x
+    pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
     
 except:
-    st.error("Something went Wrong with Connecting to the Vectore Database!!")
+    st.error("Something went wrong with Connecting to the Vectore Database!!")
 
 #Replicate Credentials
 with st.sidebar:
