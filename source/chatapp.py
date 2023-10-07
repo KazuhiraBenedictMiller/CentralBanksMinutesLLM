@@ -80,9 +80,11 @@ with st.sidebar:
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
 
 try:
-    Embeddings = HuggingFaceEmbeddings()    
+    #Embeddings = HuggingFaceEmbeddings()    
 
-    VectorDB = Pinecone.from_existing_index(config.PINECONE_INDEX_NAME, Embeddings)
+    #VectorDB = Pinecone.from_existing_index(config.PINECONE_INDEX_NAME, Embeddings)
+    
+    x+x
     
 except:
     st.error("An Error occurred when trying to retreive Data from the Vector Store!!")
