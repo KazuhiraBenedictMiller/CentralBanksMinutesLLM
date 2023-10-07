@@ -22,7 +22,13 @@ from langchain.chains import ConversationalRetrievalChain
 import streamlit as st
 import replicate
 
+import time
 from datetime import datetime
+
+
+def ClearChatHistory():
+    st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
+
 
 #App title
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
@@ -56,8 +62,8 @@ with st.sidebar:
     
     LLM = config.LLAMA2_13B
     
-    Temperature = st.sidebar.slider("Temperature", min_value = 0.01, max_value = 5.0, value = 0.75, step = 0.01)
-    TopP = st.sidebar.slider("Top P", min_value = 0.01, max_value = 1.0, value = 0.75, step = 0.01)
+    Temperature = st.sidebar.slider("Temperature - Higher -> More Creative", min_value = 0.01, max_value = 5.0, value = 0.75, step = 0.01)
+    TopP = st.sidebar.slider("Top P - Higher -> More Different Words Used", min_value = 0.01, max_value = 1.0, value = 0.75, step = 0.01)
     MaxLength = st.sidebar.slider('Max Length', min_value = 10, max_value = 5000, value = 3000, step = 10)
     
     StartYear = st.selectbox(
@@ -70,6 +76,10 @@ with st.sidebar:
     
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
 
+    st.sidebar.button("Clear Chat History", on_click = ClearChatHistory)
+    
+
+    
 #Connecting to the VectorStore
 try:
     Warning = st.warning("Connecting to the Vector Store...")
@@ -84,7 +94,7 @@ except:
 else:
     Warning.empty()
     
-    st.success("Connected to the Vector Store!!")    
+    Success1 = st.success("Connected to the Vector Store!!")    
 
 finally:
     
@@ -103,6 +113,31 @@ finally:
     else:
         Warning.empty()
         
-        st.success("Vectors Retrieved from the Store!")
+        Success2 = st.success("Vectors Retrieved from the Store!")
+        
+        time.sleep(3)
+        
+        Success1.empy()
+        Success2.empty()
+        
+    finally:
+        #Store LLM generated responses
+        if "messages" not in st.session_state.keys():
+            st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
+
+        #Display or clear chat messages
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.write(message["content"])
+
+                
+                
+        
+
+        
+        
+        
+
+
         
         
