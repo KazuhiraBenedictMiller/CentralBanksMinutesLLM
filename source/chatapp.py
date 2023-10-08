@@ -25,9 +25,13 @@ import replicate
 import time
 from datetime import datetime
 
+global ChatHistory
+ChatHistory =[]
 
 def ClearChatHistory():
     st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
+    
+    ChatHistory = []
 
 
 #App title
@@ -74,11 +78,9 @@ with st.sidebar:
     "Select the End Year for the Meeting Minutes to be Fetched:",
     range(StartYear, datetime.now().year+1))
     
-    st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
-
     st.sidebar.button("Clear Chat History", on_click = ClearChatHistory)
     
-
+    st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
     
 #Connecting to the VectorStore
 try:
@@ -129,15 +131,44 @@ finally:
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
                 st.write(message["content"])
-
+    
+        LLM = Replicate(model = config.LLAMA2_13B, model_kwargs = {"temperature": Temperature, "top_p": TopP, "max_length": MaxLength})
                 
-                
-        
+        QA_Chain = ConversationalRetrievalChain.from_llm(LLM, VectorDB.as_retriever(search_kwargs = {"k": 2}), return_source_documents = True)    
+    
+        # User-provided prompt
+        if Prompt := st.chat_input(disabled = not Replicate_API):
 
-        
-        
-        
+            st.session_state.messages.append({"role": "User", "content": Prompt})
 
+            with st.chat_message("User"):
 
-        
-        
+                st.write(Prompt)
+            
+        PromptTemplate = "You are one of the best Financial Analyst in the World, if you don't know an answer simply say that you don't know and don't try to make it up."
+            
+        LLMPrompt = PromptTemplate + Prompt
+
+        # Generate a new response if last message is not from assistant
+        if st.session_state.messages[-1]["role"] != "Assistant":
+
+            with st.chat_message("Assistant"):
+
+                with st.spinner("Thinking..."):
+                    
+                    Result = QA_Chain({'question': LLMPrompt, 'chat_history': ChatHistory})
+                    Response = Result['answer']
+                    Placeholder = st.empty()
+                    FullResponse = ""
+
+                    for item in Response:
+
+                        FullResponse += item
+                        Placeholder.markdown(FullResponse)
+
+                    Placeholder.markdown(FullResponse)
+
+            Message = {"role": "Assistant", "content": FullResponse}
+
+            st.session_state.messages.append(Message)
+            ChatHistory.append((LLMPrompt, Result['answer']))
