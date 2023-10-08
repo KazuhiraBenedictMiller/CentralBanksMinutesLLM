@@ -136,6 +136,8 @@ finally:
                 
         QA_Chain = ConversationalRetrievalChain.from_llm(LLM, VectorDB.as_retriever(search_kwargs = {"k": 2}), return_source_documents = True)    
     
+        PromptTemplate = "You are one of the best Financial Analyst in the World, if you don't know an answer simply say that you don't know and don't try to make it up."
+
         # User-provided prompt
         if Prompt := st.chat_input(disabled = not Replicate_API):
 
@@ -145,9 +147,7 @@ finally:
 
                 st.write(Prompt)
             
-        PromptTemplate = "You are one of the best Financial Analyst in the World, if you don't know an answer simply say that you don't know and don't try to make it up."
-            
-        LLMPrompt = PromptTemplate + Prompt
+            LLMPrompt = PromptTemplate + Prompt
 
         # Generate a new response if last message is not from assistant
         if st.session_state.messages[-1]["role"] != "Assistant":
