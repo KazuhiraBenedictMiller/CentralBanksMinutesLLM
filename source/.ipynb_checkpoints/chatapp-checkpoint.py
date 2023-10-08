@@ -26,7 +26,6 @@ import time
 from datetime import datetime
 
 st.session_state["ChatHistory"] = []
-st.session_state["Init"] = False
 st.session_state["DataFetched"] = False
 st.session_state["StartYear"] = 2006
 st.session_state["EndYear"] = datetime.now().year
