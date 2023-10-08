@@ -160,7 +160,7 @@ if st.session_state.messages[-1]["role"] != "Assistant":
 
         with st.spinner("Thinking..."):
                     
-            Result = QA_Chain({'question': LLMPrompt, 'chat_history': ChatHistoryst.session_state["ChatHistory"]})
+            Result = QA_Chain({'question': LLMPrompt, 'chat_history': st.session_state["ChatHistory"]})
             Response = Result['answer']
             Placeholder = st.empty()
             FullResponse = ""

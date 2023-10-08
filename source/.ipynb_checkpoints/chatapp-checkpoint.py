@@ -160,7 +160,7 @@ if st.session_state.messages[-1]["role"] != "Assistant":
 
         with st.spinner("Thinking..."):
                     
-            Result = QA_Chain({'question': LLMPrompt, 'chat_history': ChatHistory})
+            Result = QA_Chain({'question': LLMPrompt, 'chat_history': st.session_state["ChatHistory"]})
             Response = Result['answer']
             Placeholder = st.empty()
             FullResponse = ""
@@ -175,4 +175,4 @@ if st.session_state.messages[-1]["role"] != "Assistant":
         Message = {"role": "Assistant", "content": FullResponse}
 
         st.session_state.messages.append(Message)
-        ChatHistory.append((LLMPrompt, Result['answer']))
+        st.session_state["ChatHistory"].append((LLMPrompt, Result['answer']))
