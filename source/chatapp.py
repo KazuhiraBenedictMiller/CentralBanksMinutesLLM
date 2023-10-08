@@ -122,53 +122,52 @@ finally:
         Success1.empty()
         Success2.empty()
         
-    finally:
-        #Store LLM generated responses
-        if "messages" not in st.session_state.keys():
-            st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
+#Store LLM generated responses
+if "messages" not in st.session_state.keys():
+    st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
 
-        #Display or clear chat messages
-        for message in st.session_state.messages:
-            with st.chat_message(message["role"]):
-                st.write(message["content"])
+#Display or clear chat messages
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.write(message["content"])
     
-        LLM = Replicate(model = config.LLAMA2_13B, model_kwargs = {"temperature": Temperature, "top_p": TopP, "max_length": MaxLength})
+LLM = Replicate(model = config.LLAMA2_13B, model_kwargs = {"temperature": Temperature, "top_p": TopP, "max_length": MaxLength})
                 
-        QA_Chain = ConversationalRetrievalChain.from_llm(LLM, VectorDB.as_retriever(search_kwargs = {"k": 2}), return_source_documents = True)    
+QA_Chain = ConversationalRetrievalChain.from_llm(LLM, VectorDB.as_retriever(search_kwargs = {"k": 2}), return_source_documents = True)    
     
-        PromptTemplate = "You are one of the best Financial Analyst in the World, if you don't know an answer simply say that you don't know and don't try to make it up."
+PromptTemplate = "You are one of the best Financial Analyst in the World, if you don't know an answer simply say that you don't know and don't try to make it up."
 
-        # User-provided prompt
-        if Prompt := st.chat_input(disabled = not Replicate_API):
+# User-provided prompt
+if Prompt := st.chat_input(disabled = not Replicate_API):
 
-            st.session_state.messages.append({"role": "User", "content": Prompt})
+    st.session_state.messages.append({"role": "User", "content": Prompt})
 
-            with st.chat_message("User"):
-
-                st.write(Prompt)
+    with st.chat_message("User"):
             
-            LLMPrompt = PromptTemplate + Prompt
+        st.write(Prompt)
+            
+    LLMPrompt = PromptTemplate + Prompt
 
-        # Generate a new response if last message is not from assistant
-        if st.session_state.messages[-1]["role"] != "Assistant":
+# Generate a new response if last message is not from assistant
+if st.session_state.messages[-1]["role"] != "Assistant":
 
-            with st.chat_message("Assistant"):
+    with st.chat_message("Assistant"):
 
-                with st.spinner("Thinking..."):
+        with st.spinner("Thinking..."):
                     
-                    Result = QA_Chain({'question': LLMPrompt, 'chat_history': ChatHistory})
-                    Response = Result['answer']
-                    Placeholder = st.empty()
-                    FullResponse = ""
+            Result = QA_Chain({'question': LLMPrompt, 'chat_history': ChatHistory})
+            Response = Result['answer']
+            Placeholder = st.empty()
+            FullResponse = ""
 
-                    for item in Response:
+            for item in Response:
+                    
+                FullResponse += item
+                Placeholder.markdown(FullResponse)
 
-                        FullResponse += item
-                        Placeholder.markdown(FullResponse)
+            Placeholder.markdown(FullResponse)
 
-                    Placeholder.markdown(FullResponse)
+        Message = {"role": "Assistant", "content": FullResponse}
 
-            Message = {"role": "Assistant", "content": FullResponse}
-
-            st.session_state.messages.append(Message)
-            ChatHistory.append((LLMPrompt, Result['answer']))
+        st.session_state.messages.append(Message)
+        ChatHistory.append((LLMPrompt, Result['answer']))
