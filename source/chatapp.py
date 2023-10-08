@@ -82,13 +82,13 @@ def Init():
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
 st.title("🦙💬 Chat with RBA's 🏦 Monetary Policy Meeting Minutes")
 
-if "Init" not in st.session_state or st.session_state["Init"] != True:
+if "Init" not in st.session_state.keys() or st.session_state["Init"] != True:
     
     Init()
     
     st.session_state["Init"] = True
 
-if "DataFetched" not in st.session_state or st.session_state["DataFetched"] != True:
+if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched"] != True:
     
     StartYear = st.selectbox(
     "Select the Start Year for the Meeting Minutes to be Fetched:",
@@ -98,11 +98,10 @@ if "DataFetched" not in st.session_state or st.session_state["DataFetched"] != T
     "Select the End Year for the Meeting Minutes to be Fetched:",
     range(StartYear, st.session_state["EndYear"]+1))
     
-
     if st.button("Fetch!"):
         
         #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
-        
+        st.text("miao")
         st.empty()
 
     st.session_state["DataFetched"] = True
