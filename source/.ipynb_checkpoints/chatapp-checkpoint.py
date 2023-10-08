@@ -82,24 +82,26 @@ with st.sidebar:
     
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
     
-#Connecting to the VectorStore
-try:
-    Warning = st.warning("Connecting to the Vector Store...")
-    
-    pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
-    
-except:
-    Warning.empty()
-    
-    st.error("Something went wrong with Connecting to the Vectore Database!!")
-    
-else:
-    Warning.empty()
-    
-    Success1 = st.success("Connected to the Vector Store!!")    
+with st.spinner("Connecting to the VectorStore"):    
+    #Connecting to the VectorStore
+    try:
+        Warning = st.warning("Connecting to the Vector Store...")
 
-finally:
-    
+        pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
+
+    except:
+        Warning.empty()
+
+        st.error("Something went wrong with Connecting to the Vectore Database!!")
+
+    else:
+        Warning.empty()
+
+        Success1 = st.success("Connected to the Vector Store!!")    
+
+
+with st.spinner("Fetching Data from VectorStore"):
+    #Fetching Data from VectorStore
     try:
         Embeddings = HuggingFaceEmbeddings()    
 
