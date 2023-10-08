@@ -81,7 +81,6 @@ with st.sidebar:
     
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
     
-if st.session_state[
 def Init():
     with st.spinner("Connecting to the VectorStore"):    
         #Connecting to the VectorStore
@@ -125,8 +124,10 @@ def Init():
             Success1.empty()
             Success2.empty()
 
-Init()
-            
+if st.session_state["Init"] not in st.session_state or st.session_state["Init"] != True:
+    Init()
+    st.session_state["Init"] = True
+    
 #Store LLM generated responses
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
