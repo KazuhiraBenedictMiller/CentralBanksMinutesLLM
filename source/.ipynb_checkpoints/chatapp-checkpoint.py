@@ -33,7 +33,6 @@ def ClearChatHistory():
     
     ChatHistory = []
 
-
 #App title
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
 st.title("🦙💬 Chat with RBA's 🏦 Monetary Policy Meeting Minutes")
@@ -82,48 +81,52 @@ with st.sidebar:
     
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
     
-with st.spinner("Connecting to the VectorStore"):    
-    #Connecting to the VectorStore
-    try:
-        Warning = st.warning("Connecting to the Vector Store...")
+@st.cache
+def Init():
+    with st.spinner("Connecting to the VectorStore"):    
+        #Connecting to the VectorStore
+        try:
+            Warning = st.warning("Connecting to the Vector Store...")
 
-        pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
+            pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
 
-    except:
-        Warning.empty()
+        except:
+            Warning.empty()
 
-        st.error("Something went wrong with Connecting to the Vectore Database!!")
+            st.error("Something went wrong with Connecting to the Vectore Database!!")
 
-    else:
-        Warning.empty()
+        else:
+            Warning.empty()
 
-        Success1 = st.success("Connected to the Vector Store!!")    
+            Success1 = st.success("Connected to the Vector Store!!")    
 
 
-with st.spinner("Fetching Data from VectorStore"):
-    #Fetching Data from VectorStore
-    try:
-        Embeddings = HuggingFaceEmbeddings()    
+    with st.spinner("Fetching Data from VectorStore"):
+        #Fetching Data from VectorStore
+        try:
+            Embeddings = HuggingFaceEmbeddings()    
 
-        VectorDB = Pinecone.from_existing_index(config.PINECONE_INDEX_NAME, Embeddings)
-    
-        Warning = st.warning("Retrieving Vectors from the Vector Store...")
-    
-    except:
-        Warning.empty()
-    
-        st.error("An Error occurred when trying to retreive Data from the Vector Store!!")
+            VectorDB = Pinecone.from_existing_index(config.PINECONE_INDEX_NAME, Embeddings)
 
-    else:
-        Warning.empty()
-        
-        Success2 = st.success("Vectors Retrieved from the Store!")
-        
-        time.sleep(3)
-        
-        Success1.empty()
-        Success2.empty()
-        
+            Warning = st.warning("Retrieving Vectors from the Vector Store...")
+
+        except:
+            Warning.empty()
+
+            st.error("An Error occurred when trying to retreive Data from the Vector Store!!")
+
+        else:
+            Warning.empty()
+
+            Success2 = st.success("Vectors Retrieved from the Store!")
+
+            time.sleep(3)
+
+            Success1.empty()
+            Success2.empty()
+
+Init()
+            
 #Store LLM generated responses
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
