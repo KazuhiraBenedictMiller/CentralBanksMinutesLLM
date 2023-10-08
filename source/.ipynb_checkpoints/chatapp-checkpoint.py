@@ -25,13 +25,12 @@ import replicate
 import time
 from datetime import datetime
 
-global ChatHistory
-ChatHistory =[]
+st.session_state["ChatHistory"] =[]
 
 def ClearChatHistory():
     st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
     
-    ChatHistory = []
+    st.session_state["ChatHistory"] =[]
 
 #App title
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
@@ -105,7 +104,7 @@ def Init():
         try:
             Embeddings = HuggingFaceEmbeddings()    
 
-            VectorDB = Pinecone.from_existing_index(config.PINECONE_INDEX_NAME, Embeddings)
+            st.session_state["VectorDB"] = Pinecone.from_existing_index(config.PINECONE_INDEX_NAME, Embeddings)
 
             Warning = st.warning("Retrieving Vectors from the Vector Store...")
 
@@ -139,7 +138,7 @@ for message in st.session_state.messages:
     
 LLM = Replicate(model = config.LLAMA2_13B, model_kwargs = {"temperature": Temperature, "top_p": TopP, "max_length": MaxLength})
                 
-QA_Chain = ConversationalRetrievalChain.from_llm(LLM, VectorDB.as_retriever(search_kwargs = {"k": 2}), return_source_documents = True)    
+QA_Chain = ConversationalRetrievalChain.from_llm(LLM, st.session_state["VectorDB"].as_retriever(search_kwargs = {"k": 2}), return_source_documents = True)    
     
 PromptTemplate = "You are one of the best Financial Analyst in the World, if you don't know an answer simply say that you don't know and don't try to make it up."
 
