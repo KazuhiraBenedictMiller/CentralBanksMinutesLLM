@@ -72,7 +72,7 @@ def FetchDataForYear(Links):
         RBA_Base_Link = "https://www.rba.gov.au/"
 
         Response = requests.get(RBA_Base_Link + x["Link"])
-        Soup = BeautifulSoup(Response.text,"html.parser")
+        Soup = BeautifulSoup(Response.text, "html.parser")
 
         Div = Soup.find("div", {"id": "content"})
                 
