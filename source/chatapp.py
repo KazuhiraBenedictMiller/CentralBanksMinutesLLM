@@ -81,7 +81,7 @@ with st.sidebar:
     
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
     
-@st.cache
+if st.session_state[
 def Init():
     with st.spinner("Connecting to the VectorStore"):    
         #Connecting to the VectorStore
