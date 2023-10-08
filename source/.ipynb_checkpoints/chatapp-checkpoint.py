@@ -124,7 +124,7 @@ def Init():
             Success1.empty()
             Success2.empty()
 
-if st.session_state["Init"] not in st.session_state or st.session_state["Init"] != True:
+if "Init" not in st.session_state or st.session_state["Init"] != True:
     Init()
     st.session_state["Init"] = True
     
