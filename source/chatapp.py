@@ -67,19 +67,18 @@ if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched
             
     if st.session_state["UI_Step"] == 1:
         with Placeholder.container():
-                
-            #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
+            st.warning("Index Name can only contain Lower Case Letters!!")
             IndexName = Placeholder.text_input("Give a Name to the Vector Store Index:")
             
             if IndexName != "" and IndexName.isalpha() and IndexName.islower():
-                
                 Placeholder.empty()
                 st.session_state["DataFetched"] = True
                 st.session_state["UI_Step"] += 1
-                
-            else:
-                st.text("miao")
-                st.error("Index Name can only contain Lower Case Letters!!")
+
+        
+        
+            #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
+
                 
 
 
