@@ -39,46 +39,46 @@ def Init():
     st.session_state["StartYear"] = 2006
     st.session_state["EndYear"] = datetime.now().year
     
+    st.session_state["UI_Step"] = 0
+    
 #App title
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
 st.title("🦙💬 Chat with RBA's 🏦 Monetary Policy Meeting Minutes")
 
 if "Init" not in st.session_state.keys() or st.session_state["Init"] != True:
-    
     Init()
 
 if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched"] != True:
     Placeholder = st.empty() 
-        
-    with Placeholder.container():      
-        StartYear = st.selectbox(
-        "Select the Start Year for the Meeting Minutes to be Fetched:",
-        range(2006, st.session_state["EndYear"]+1))
-
-        EndYear = st.selectbox(
-        "Select the End Year for the Meeting Minutes to be Fetched:",
-        range(StartYear, st.session_state["EndYear"]+1))
     
-        if st.button("Fetch!"):
-            Placeholder.empty()
-            Placeholder = st.empty() 
+    if st.session_state["UI_Step"] == 0:
+        with Placeholder.container():      
+            StartYear = st.selectbox(
+            "Select the Start Year for the Meeting Minutes to be Fetched:",
+            range(2006, st.session_state["EndYear"]+1))
+
+            EndYear = st.selectbox(
+            "Select the End Year for the Meeting Minutes to be Fetched:",
+            range(StartYear, st.session_state["EndYear"]+1))
+    
+            if st.button("Fetch!"):
+                Placeholder.empty()
+                st.session_state["UI_Step"] += 1
             
+    if st.session_state["UI_Step"] == 1:
         with Placeholder.container():
                 
             #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
             IndexName = Placeholder.text_input("Give a Name to the Vector Store Index:")
             
-            Name = st.button("Give Name!")
+            if IndexName != "" and IndexName.isalpha() and IndexName.islower():
                 
-            if Name:
-                if IndexName != "" and IndexName.isalpha() and IndexName.islower():
+                Placeholder.empty()
+                st.session_state["DataFetched"] = True
+                st.session_state["UI_Step"] += 1
                 
-
-                    Placeholder.empty()
-                    st.session_state["DataFetched"] = True
-                
-                else:
-                    st.warning("Index Name can only contain Lower Case Letters!!")
+            else:
+                st.error("Index Name can only contain Lower Case Letters!!")
                 
 
 
