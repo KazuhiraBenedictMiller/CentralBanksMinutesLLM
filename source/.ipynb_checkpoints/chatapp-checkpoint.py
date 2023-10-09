@@ -60,11 +60,19 @@ if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched
         range(StartYear, st.session_state["EndYear"]+1))
     
         if st.button("Fetch!"):
-            #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
-
             Placeholder.empty()
-            Placeholder.write("miao")
+            
+            #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
+            IndexName = Placeholder.text_input("Give a Name to the Vector Store Index:")
+            
+            if IndexName != "" and IndexName.isalpha() and IndexName.islower():
+                
 
-            st.session_state["DataFetched"] = True
+                Placeholder.empty()
+                st.session_state["DataFetched"] = True
+                
+            else:
+                st.warning("Index Name can only contain Lower Case Letters!!")
+                
 
 
