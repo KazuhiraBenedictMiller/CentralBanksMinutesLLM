@@ -78,6 +78,7 @@ if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched
                 st.session_state["UI_Step"] += 1
                 
             else:
+                st.text("miao")
                 st.error("Index Name can only contain Lower Case Letters!!")
                 
 
