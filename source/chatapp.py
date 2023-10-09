@@ -59,13 +59,12 @@ if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched
         "Select the End Year for the Meeting Minutes to be Fetched:",
         range(StartYear, st.session_state["EndYear"]+1))
     
-    if st.button("Fetch!"):
-        
-        #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
-        
-        Placeholder.empty()
-        Placeholder.write("miao")
+        if st.button("Fetch!"):
+            #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
 
-        st.session_state["DataFetched"] = True
+            Placeholder.empty()
+            Placeholder.write("miao")
+
+            st.session_state["DataFetched"] = True
 
 
