@@ -33,7 +33,7 @@ def ClearChatHistory():
 def Init():
     st.session_state["ChatHistory"] = []
     
-    st.session_state["UI_Phase"] == 0
+    st.session_state["UI_Phase"] = 0
 
     st.session_state["Init"] = True
     st.session_state["YearsSelected"] = False
