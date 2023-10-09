@@ -48,10 +48,10 @@ st.title("🦙💬 Chat with RBA's 🏦 Monetary Policy Meeting Minutes")
 if "Init" not in st.session_state.keys() or st.session_state["Init"] != True:
     Init()
 
-if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched"] != True:
-    Placeholder = st.empty() 
-    
+if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched"] != True:    
     if st.session_state["UI_Step"] == 0:
+        Placeholder = st.empty() 
+        
         with Placeholder.container():      
             StartYear = st.selectbox(
             "Select the Start Year for the Meeting Minutes to be Fetched:",
@@ -66,6 +66,8 @@ if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched
                 st.session_state["UI_Step"] += 1
             
     if st.session_state["UI_Step"] == 1:
+        Placeholder = st.empty() 
+        
         with Placeholder.container():
             st.warning("Index Name can only contain Lower Case Letters!!")
             IndexName = Placeholder.text_input("Give a Name to the Vector Store Index:")
