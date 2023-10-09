@@ -82,6 +82,7 @@ if "IndexName" not in st.session_state.keys() or st.session_state["IndexName"] !
 
             if IndexName != "" and IndexName.isalpha() and IndexName.islower():
                 Placeholder.empty()
+                Warning.empty()
                 st.session_state["IndexName"] = True
                 st.session_state["UI_Phase"] += 1
 
