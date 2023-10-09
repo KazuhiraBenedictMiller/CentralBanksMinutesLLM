@@ -74,9 +74,10 @@ if "YearsSelected" not in st.session_state.keys() or st.session_state["YearsSele
 if "IndexName" not in st.session_state.keys() or st.session_state["IndexName"] != True:    
     if st.session_state["UI_Phase"] == 1:
         Placeholder = st.empty() 
+        Warningg = st.warning("Index Name can only contain Lower Case Letters!!")
 
         with Placeholder.container():
-            st.warning("Index Name can only contain Lower Case Letters!!")
+            Warning = st.warning("Index Name can only contain Lower Case Letters!!")
             IndexName = Placeholder.text_input("Give a Name to the Vector Store Index:")
 
             if IndexName != "" and IndexName.isalpha() and IndexName.islower():
