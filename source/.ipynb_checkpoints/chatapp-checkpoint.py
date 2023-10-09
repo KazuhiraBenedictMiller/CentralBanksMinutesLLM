@@ -67,7 +67,7 @@ if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched
             #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
             IndexName = Placeholder.text_input("Give a Name to the Vector Store Index:")
             
-            if st.button("Give Name!")
+            if st.button("Give Name!"):
                 if IndexName != "" and IndexName.isalpha() and IndexName.islower():
                 
 
