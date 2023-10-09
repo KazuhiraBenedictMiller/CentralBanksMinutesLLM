@@ -60,12 +60,10 @@ if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched
         range(StartYear, st.session_state["EndYear"]+1))
     
         if st.button("Fetch!"):
-            Placeholder.empty()
-            
-            with Placeholder.container():
+            with st.empty():
                 
                 #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
-                IndexName = Placeholder.text_input("Give a Name to the Vector Store Index:")
+                IndexName = st.text_input("Give a Name to the Vector Store Index:")
             
                 Name = st.button("Give Name!")
                 
