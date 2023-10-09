@@ -63,22 +63,22 @@ if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched
             Placeholder.empty()
             Placeholder = st.empty() 
             
-            with Placeholder.container():
+        with Placeholder.container():
                 
-                #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
-                IndexName = Placeholder.text_input("Give a Name to the Vector Store Index:")
+            #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
+            IndexName = Placeholder.text_input("Give a Name to the Vector Store Index:")
             
-                Name = st.button("Give Name!")
+            Name = st.button("Give Name!")
                 
-                if Name:
-                    if IndexName != "" and IndexName.isalpha() and IndexName.islower():
+            if Name:
+                if IndexName != "" and IndexName.isalpha() and IndexName.islower():
                 
 
-                        Placeholder.empty()
-                        st.session_state["DataFetched"] = True
+                    Placeholder.empty()
+                    st.session_state["DataFetched"] = True
                 
-                    else:
-                        st.warning("Index Name can only contain Lower Case Letters!!")
+                else:
+                    st.warning("Index Name can only contain Lower Case Letters!!")
                 
 
 
