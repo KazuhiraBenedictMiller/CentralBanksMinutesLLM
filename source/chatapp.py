@@ -66,6 +66,6 @@ if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched
         Placeholder.empty()
         Placeholder.write("miao")
 
-    st.session_state["DataFetched"] = True
+        st.session_state["DataFetched"] = True
 
 
