@@ -34,13 +34,15 @@ def Init():
     st.session_state["ChatHistory"] = []
     
     st.session_state["Init"] = True
+    st.session_state["YearsSelected"] = False
+    st.session_state["IndexName"] = False
+
     st.session_state["DataFetched"] = False
+
     
     st.session_state["StartYear"] = 2006
     st.session_state["EndYear"] = datetime.now().year
-    
-    st.session_state["UI_Step"] = 0
-    
+        
 #App title
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
 st.title("🦙💬 Chat with RBA's 🏦 Monetary Policy Meeting Minutes")
@@ -48,34 +50,32 @@ st.title("🦙💬 Chat with RBA's 🏦 Monetary Policy Meeting Minutes")
 if "Init" not in st.session_state.keys() or st.session_state["Init"] != True:
     Init()
 
-if "DataFetched" not in st.session_state.keys() or st.session_state["DataFetched"] != True:    
-    if st.session_state["UI_Step"] == 0:
-        Placeholder = st.empty() 
+if "YearsSelected" not in st.session_state.keys() or st.session_state["YearsSelected"] != True:    
+    Placeholder = st.empty() 
         
-        with Placeholder.container():      
-            StartYear = st.selectbox(
-            "Select the Start Year for the Meeting Minutes to be Fetched:",
-            range(2006, st.session_state["EndYear"]+1))
+    with Placeholder.container():      
+        StartYear = st.selectbox(
+        "Select the Start Year for the Meeting Minutes to be Fetched:",
+        range(2006, st.session_state["EndYear"]+1))
 
-            EndYear = st.selectbox(
-            "Select the End Year for the Meeting Minutes to be Fetched:",
-            range(StartYear, st.session_state["EndYear"]+1))
+        EndYear = st.selectbox(
+        "Select the End Year for the Meeting Minutes to be Fetched:",
+        range(StartYear, st.session_state["EndYear"]+1))
     
-            if st.button("Fetch!"):
-                Placeholder.empty()
-                st.session_state["UI_Step"] += 1
-            
-    if st.session_state["UI_Step"] == 1:
-        Placeholder = st.empty() 
+        if st.button("Fetch!"):
+            Placeholder.empty()
+            st.session_state["YearsSelected"] = True
+
+if "IndexName" not in st.session_state.keys() or st.session_state["IndexName"] != True:    
+    Placeholder = st.empty() 
         
-        with Placeholder.container():
-            st.warning("Index Name can only contain Lower Case Letters!!")
-            IndexName = Placeholder.text_input("Give a Name to the Vector Store Index:")
+    with Placeholder.container():
+        st.warning("Index Name can only contain Lower Case Letters!!")
+        IndexName = Placeholder.text_input("Give a Name to the Vector Store Index:")
             
-            if IndexName != "" and IndexName.isalpha() and IndexName.islower():
-                Placeholder.empty()
-                st.session_state["DataFetched"] = True
-                st.session_state["UI_Step"] += 1
+        if IndexName != "" and IndexName.isalpha() and IndexName.islower():
+            Placeholder.empty()
+            st.session_state["IndexName"] = True
 
         
         
