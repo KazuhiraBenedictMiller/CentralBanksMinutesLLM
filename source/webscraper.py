@@ -68,23 +68,23 @@ def FetchDataForYear(Links):
     #For a Given List of Links, we Iterate through each one of them and Scrape the Content, Clean it and Dump it to Disk
     
     for x in Links:
-        
-        RBA_Base_Link = "https://www.rba.gov.au/"
+        if x.endswith("html"):
+            RBA_Base_Link = "https://www.rba.gov.au/"
 
-        Response = requests.get(RBA_Base_Link + x["Link"])
-        Soup = BeautifulSoup(Response.text, "html.parser")
+            Response = requests.get(RBA_Base_Link + x["Link"])
+            Soup = BeautifulSoup(Response.text, "html.parser")
 
-        Div = Soup.find("div", {"id": "content"})
-                
-        Text = []
-        
-        #for y in Div.find_all("p") -> To get only Paragraphs and not Titles 
-        for y in Div:
-            Text.append(y.text)
-            
-        CleanedText = CleanTextData(Text)
-            
-        PrintPDF(paths.STORAGE_DATA_DIR / f'{x["Title"]}.pdf', f'{x["Title"]}.pdf',CleanedText)
+            Div = Soup.find("div", {"id": "content"})
+
+            Text = []
+
+            #for y in Div.find_all("p") -> To get only Paragraphs and not Titles 
+            for y in Div:
+                Text.append(y.text)
+
+            CleanedText = CleanTextData(Text)
+
+            PrintPDF(paths.STORAGE_DATA_DIR / f'{x["Title"]}.pdf', f'{x["Title"]}.pdf',CleanedText)
             
 def ScrapeData(StartYear, EndYear):
     

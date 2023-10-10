@@ -1,3 +1,4 @@
+'''
 from bs4 import BeautifulSoup
 import requests
 
@@ -34,3 +35,21 @@ def FetchDataForYear(Links):
         if not File_Path.exists():
             with open (File_Path, "w", encoding = "utf-8") as f:
                 f.write('\n'.join(Text))
+                
+'''
+
+import os
+import sys
+
+from dotenv import load_dotenv
+
+load_dotenv("../.env")
+
+PINECONE_API_TOKEN = os.environ["PINECONE_API_TOKEN"]
+
+import pinecone
+
+
+pinecone.init("njhjh", "gcp-starter")
+
+print("miao")
