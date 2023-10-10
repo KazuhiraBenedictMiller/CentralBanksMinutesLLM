@@ -187,7 +187,7 @@ if "YearsSelected" not in st.session_state.keys() or st.session_state["YearsSele
         with Placeholder.container():      
             StartYear = st.selectbox(
             "Select the Start Year for the Meeting Minutes to be Fetched:",
-            range(st.session_stateþ["StartYearRange"], st.session_state["EndYearRange"]+1))
+            range(st.session_state["StartYearRange"], st.session_state["EndYearRange"]+1))
 
             EndYear = st.selectbox(
             "Select the End Year for the Meeting Minutes to be Fetched:",
