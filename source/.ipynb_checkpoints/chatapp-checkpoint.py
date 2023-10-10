@@ -107,7 +107,7 @@ def ETL_Pipeline(StartYear, EndYear):
 
         # 2) Scrape the Content
         for x in Minutes_Links:
-            if x.endswith("html"):
+            if x["Link"].endswith("html"):
                 Response = requests.get(RBA_Base_Link + x["Link"])
                 Soup = BeautifulSoup(Response.text, "html.parser")
 
