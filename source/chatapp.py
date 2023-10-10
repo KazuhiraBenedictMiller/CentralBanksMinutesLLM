@@ -8,6 +8,9 @@ from dotenv import load_dotenv
 
 load_dotenv("../.env")
 
+import requests
+from bs4 import BeautifulSoup
+
 import paths
 import config
 import webscraper
@@ -225,7 +228,7 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
 
         ProgressBar = st.progress(10, "Creating the Vector Index")
         
-        pinecone.create_index(st.session_state["VectorDBIndexName"], dimension=1024)
+        pinecone.create_index(st.session_state["VectorDBIndexName"], dimension=768)
         
         ProgressBar.progress(20, "Fetching Data")
         
