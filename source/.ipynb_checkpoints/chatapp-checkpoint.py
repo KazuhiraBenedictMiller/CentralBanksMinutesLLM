@@ -232,6 +232,8 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
         
         ProgressBar.progress(20, "Fetching Data")
         
+        print(st.session_state["StartYear"], st.session_state["EndYear"])
+        
         ETL_Pipeline(st.session_state["StartYear"], st.session_state["EndYear"])
         
         #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
