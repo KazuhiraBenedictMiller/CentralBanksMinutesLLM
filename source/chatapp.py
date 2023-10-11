@@ -196,8 +196,8 @@ if "YearsSelected" not in st.session_state.keys() or st.session_state["YearsSele
             if st.button("Fetch!"):
                 Placeholder.empty()
                 
-                st.session_state["StartYear"] = StartYear
-                st.session_state["EndYear"] = EndYear
+                st.session_state["StartYear"] = int(StartYear)
+                st.session_state["EndYear"] = int(EndYear)
                 st.session_state["YearsSelected"] = True
                 st.session_state["UI_Phase"] += 1
 
@@ -232,8 +232,8 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
         
         ProgressBar.progress(20, "Fetching Data")
         
-        st.text(st.session_state["StartYear"])
-        st.text(st.session_state["EndYear"])
+        st.text(type(st.session_state["StartYear"]))
+        st.text(type(st.session_state["EndYear"]))
         
         ETL_Pipeline(2006, 2006)
         
