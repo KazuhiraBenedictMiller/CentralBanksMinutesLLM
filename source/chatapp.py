@@ -235,7 +235,7 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
         st.text(st.session_state["StartYear"])
         st.text(st.session_state["EndYear"])
         
-        ETL_Pipeline(int(st.session_state["StartYear"]), int(st.session_state["EndYear"]))
+        ETL_Pipeline(2006, 2006)
         
         #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
 
