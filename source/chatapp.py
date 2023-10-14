@@ -36,6 +36,7 @@ def CleanTextData(Text):
     
     ToReplace = {"\n": " ",
                  "\t": " ",
+                 "\r": " ",
                  "\xa0": " ",
                  ",": ", ",
                  "  ": " ",
@@ -61,26 +62,6 @@ def CleanTextData(Text):
         
     return Text
 
-def PrintPDF(File_Path, Title, CleanedText):
-    
-    #Function Only used to Dump the PDF to Disk
-    
-    #If File doesn't Exist, it then sets the pdf properties and it dumps to Disk
-    
-    if not File_Path.exists():
-        PDF = FPDF()
-        PDF.add_page()
-        PDF.set_font("Arial", size = 10)
-        PDF.set_margins(left = 10, top = 10, right = 10)
-            
-        for text in CleanedText:
-            PDF.multi_cell(w = 0, h = 9, txt = text, align = "L")
-
-        PDF.output(File_Path)
-    
-    else:
-        print(f'{Title} Already Processed and in the Vector Store. Check in the Storage Directory.')
-        
 def ETL_Pipeline(StartYear, EndYear):
     
     # For a Given Range of Years from StartYear to EndYear, we: 
@@ -94,7 +75,6 @@ def ETL_Pipeline(StartYear, EndYear):
     Monetary_Policy_Link = "monetary-policy/rba-board-minutes/"
     
     while StartYear <= EndYear:
-        
         # 1) Getting all the Links
         Complete_Link = RBA_Base_Link + Monetary_Policy_Link + str(StartYear) + "/"
     
@@ -121,33 +101,19 @@ def ETL_Pipeline(StartYear, EndYear):
                 
                 # 3) Cleaning Data
                 CleanedText = CleanTextData(Text)
-
-                PrintPDF(paths.STORAGE_DATA_DIR / f'{x["Title"]}.pdf', f'{x["Title"]}.pdf', CleanedText)
-
+                CleanedText = "".join(CleanedText)
+                TextSplitter = CharacterTextSplitter(chunk_size = 1000, chunk_overlap = 0, separator = " ")    
+                SplittedText = TextSplitter.split_text(CleanedText)
+                #print(len(Splitted[0]))
+                
+                # 4) Embeddings
+                Embeddings = HuggingFaceEmbeddings() #(model_name = "sentence-transformers/all-MiniLM-L6-v2")
+                
+                # 5) Loading Documents into the Vector Database
+                LoadToVectorStore(SplittedText, Embeddings, st.session_state["VectorDBIndexName"])
+                
         StartYear += 1
-        
-    for z in os.listdir(paths.TRANSFORMED_DATA_DIR):
-        if z.endswith(".pdf"):
-            
-            FilePath = str(paths.TRANSFORMED_DATA_DIR / z)
-            Loader = PyPDFLoader(FilePath)
-            Document = Loader.load()
-        
-            TextSplitter = CharacterTextSplitter(chunk_size = 1000, chunk_overlap = 0)
-            Text = TextSplitter.split_documents(Document)
-            
-            # 4) Generate Embeddings
-            Embeddings = HuggingFaceEmbeddings() #(model_name = "sentence-transformers/all-MiniLM-L6-v2")
-        
-            # 5) Loading Documents into the Vector Database
 
-            LoadToVectorStore(Text, Embeddings, st.session_state["VectorDBIndexName"])
-        
-            #After Loading the Documents' Embeddings to the Vector Store, the File is Moved to a Storage Directory
-
-            shutil.move(FilePath, str(paths.STORAGE_DATA_DIR / z))
-
-    
 def ClearChatHistory():
     st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
     
@@ -235,10 +201,7 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
         st.text(type(st.session_state["StartYear"]))
         st.text(type(st.session_state["EndYear"]))
         
+        #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
         ETL_Pipeline(int(st.session_state["StartYear"]), int(st.session_state["EndYear"]))
         
-        #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
-
-                
-
-
+        
