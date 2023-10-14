@@ -19,6 +19,7 @@ import etlpipeline
 import pinecone
 from langchain.llms import Replicate
 from langchain.vectorstores import Pinecone
+from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.chains import ConversationalRetrievalChain
 
@@ -110,7 +111,7 @@ def ETL_Pipeline(StartYear, EndYear):
                 Embeddings = HuggingFaceEmbeddings() #(model_name = "sentence-transformers/all-MiniLM-L6-v2")
                 
                 # 5) Loading Documents into the Vector Database
-                LoadToVectorStore(SplittedText, Embeddings, st.session_state["VectorDBIndexName"])
+                #LoadToVectorStore(SplittedText, Embeddings, st.session_state["VectorDBIndexName"])
                 
         StartYear += 1
 
@@ -160,12 +161,12 @@ if "YearsSelected" not in st.session_state.keys() or st.session_state["YearsSele
             range(StartYear, st.session_state["EndYearRange"]+1))
 
             if st.button("Fetch!"):
-                Placeholder.empty()
-                
                 st.session_state["StartYear"] = int(StartYear)
                 st.session_state["EndYear"] = int(EndYear)
                 st.session_state["YearsSelected"] = True
+                
                 st.session_state["UI_Phase"] += 1
+                Placeholder.empty()
 
 #Naming the Index in the Feature Store
 if "IndexName" not in st.session_state.keys() or st.session_state["IndexName"] != True:    
@@ -199,9 +200,9 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
         ProgressBar.progress(20, "Fetching Data")
         
         st.text(type(st.session_state["StartYear"]))
+        st.text(st.session_state["StartYear"])
         st.text(type(st.session_state["EndYear"]))
+        st.text(st.session_state["EndYear"])
         
         #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
         ETL_Pipeline(int(st.session_state["StartYear"]), int(st.session_state["EndYear"]))
-        
-        
