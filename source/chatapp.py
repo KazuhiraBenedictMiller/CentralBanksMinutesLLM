@@ -188,7 +188,13 @@ if "IndexName" not in st.session_state.keys() or st.session_state["IndexName"] !
 if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingPhase"] != True:    
     if st.session_state["UI_Phase"] == 2:
         
-        ProgressBar = st.progress(0, "Connecting to the VectorStore")
+        ProgressBar = st.progress(0, "Progress")
+        
+        with st.spinner("Connecting to the VectorStore"):
+            #Connecting to the VectorStore
+            pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
+            
+            ProgressBar.progress(10)
         
         #Connecting to the VectorStore
         pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
