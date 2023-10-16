@@ -78,9 +78,7 @@ def ETL_Pipeline(StartYear, EndYear):
     while StartYear <= EndYear:
         # 1) Getting all the Links
         Complete_Link = RBA_Base_Link + Monetary_Policy_Link + str(StartYear) + "/"
-    
-        st.text(Complete_Link)
-        
+            
         Response = requests.get(Complete_Link)
         Soup = BeautifulSoup(Response.text,"html.parser")
 
@@ -197,7 +195,7 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
 
         ProgressBar = st.progress(10, "Creating the Vector Index")
         
-        pinecone.create_index(st.session_state["VectorDBIndexName"], dimension=768)
+        #pinecone.create_index(st.session_state["VectorDBIndexName"], dimension=768)
         
         ProgressBar.progress(20, "Fetching Data")
         
