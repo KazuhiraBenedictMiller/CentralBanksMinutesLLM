@@ -79,6 +79,8 @@ def ETL_Pipeline(StartYear, EndYear):
         # 1) Getting all the Links
         Complete_Link = RBA_Base_Link + Monetary_Policy_Link + str(StartYear) + "/"
     
+        st.text(Complete_Link)
+        
         Response = requests.get(Complete_Link)
         Soup = BeautifulSoup(Response.text,"html.parser")
 
@@ -135,8 +137,8 @@ def Init():
     st.session_state["StartYearRange"] = 2006
     st.session_state["EndYearRange"] = datetime.now().year
     
-    st.session_state["StartYear"] = 0
-    st.session_state["EndYear"] = 0
+    st.session_state["StartYear"] = 2006
+    st.session_state["EndYear"] = 2006
         
 #App title
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
@@ -206,3 +208,4 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
         
         #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
         ETL_Pipeline(int(st.session_state["StartYear"]), int(st.session_state["EndYear"]))
+        
