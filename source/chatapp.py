@@ -193,7 +193,7 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
         #Connecting to the VectorStore
         pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
 
-        ProgressBar = st.progress(10, "Creating the Vector Index")
+        ProgressBar.progress(10, "Creating the Vector Index")
         
         #pinecone.create_index(st.session_state["VectorDBIndexName"], dimension=768)
         
