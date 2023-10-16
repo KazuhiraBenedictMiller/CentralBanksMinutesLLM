@@ -199,11 +199,13 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
         
         ProgressBar.progress(20, "Fetching Data")
         
-        st.text(type(st.session_state["StartYear"]))
-        st.text(st.session_state["StartYear"])
-        st.text(type(st.session_state["EndYear"]))
-        st.text(st.session_state["EndYear"])
+        #st.text(type(st.session_state["StartYear"]))
+        #st.text(st.session_state["StartYear"])
+        #st.text(type(st.session_state["EndYear"]))
+        #st.text(st.session_state["EndYear"])
         
         #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
         ETL_Pipeline(int(st.session_state["StartYear"]), int(st.session_state["EndYear"]))
+        
+        
         
