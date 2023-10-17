@@ -114,7 +114,7 @@ def ETL_Pipeline(StartYear, EndYear):
                 
                 # 5) Loading Documents into the Vector Database
                 #LoadToVectorStore(SplittedText, Embeddings, st.session_state["VectorDBIndexName"])
-                VectorDB = Pinecone.from_documents(Text, Embeddings, index_name = IndexName)
+                VectorDB = Pinecone.from_documents(SplittedText, Embeddings, index_name = IndexName)
 
         StartYear += 1
 
@@ -135,6 +135,7 @@ def Init():
     st.session_state["ChatPhase"] = False
     
     st.session_state["VectorDBIndexName"] = ""
+    st.session_state["VectorDB"] = ""
     
     st.session_state["StartYearRange"] = 2006
     st.session_state["EndYearRange"] = datetime.now().year
@@ -262,7 +263,7 @@ if "ChatPhase" not in st.session_state.keys() or st.session_state["ChatPhase"] !
             pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
             
             Embeddings = HuggingFaceEmbeddings()
-            VectorDB = Pinecone.from_existing_index(st.session_state["VectorDBIndexName"], Embeddings)
+            st.session_state["VectorDB"] = Pinecone.from_existing_index(st.session_state["VectorDBIndexName"], Embeddings)
         
         
             #Store LLM generated responses
