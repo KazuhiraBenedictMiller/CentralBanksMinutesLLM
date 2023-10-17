@@ -83,9 +83,11 @@ def ETL_Pipeline(StartYear, EndYear):
         Soup = BeautifulSoup(Response.text,"html.parser")
 
         UL = Soup.find("ul", {"class": "list-articles"})
+        st.text(UL)
         As = UL.find_all("a")
         Minutes_Links = [{"Link" : x["href"], "Title" : x.text.replace(" ", "_")} for x in As]
 
+        print(Minutes_Links)
         # 2) Scrape the Content
         for x in Minutes_Links:
             if x["Link"].endswith("html"):
@@ -142,6 +144,7 @@ def Init():
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
 st.title("🦙💬 Chat with RBA's 🏦 Monetary Policy Meeting Minutes")
 
+'''
 #Initialization
 if "Init" not in st.session_state.keys() or st.session_state["Init"] != True:
     Init()
@@ -211,4 +214,6 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
             ProgressBar.progress(30)
         
         
-        
+'''
+
+ETL_Pipeline(2006, 2006)
