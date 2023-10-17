@@ -83,10 +83,11 @@ def ETL_Pipeline(StartYear, EndYear):
         Soup = BeautifulSoup(Response.text,"html.parser")
 
         UL = Soup.find("ul", {"class": "list-articles"})
-        As = UL.find_all("a")
+        #As = UL.find_all("a") <- Not Working on Streamlit for Unknown Reasons
+        As = Soup.select("ul[class=list-articles] > li > a")
+                
         Minutes_Links = [{"Link" : x["href"], "Title" : x.text.replace(" ", "_")} for x in As]
 
-        print(Minutes_Links)
         # 2) Scrape the Content
         for x in Minutes_Links:
             if x["Link"].endswith("html"):
