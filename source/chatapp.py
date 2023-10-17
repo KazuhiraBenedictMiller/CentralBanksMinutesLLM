@@ -83,7 +83,6 @@ def ETL_Pipeline(StartYear, EndYear):
         Soup = BeautifulSoup(Response.text,"html.parser")
 
         UL = Soup.find("ul", {"class": "list-articles"})
-        st.text(UL)
         As = UL.find_all("a")
         Minutes_Links = [{"Link" : x["href"], "Title" : x.text.replace(" ", "_")} for x in As]
 
@@ -144,7 +143,6 @@ def Init():
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
 st.title("🦙💬 Chat with RBA's 🏦 Monetary Policy Meeting Minutes")
 
-'''
 #Initialization
 if "Init" not in st.session_state.keys() or st.session_state["Init"] != True:
     Init()
@@ -212,8 +210,3 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
             #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
             ETL_Pipeline(int(st.session_state["StartYear"]), int(st.session_state["EndYear"]))
             ProgressBar.progress(30)
-        
-        
-'''
-
-ETL_Pipeline(2006, 2006)
