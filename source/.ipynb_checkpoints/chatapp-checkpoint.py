@@ -316,6 +316,6 @@ if "ChatPhase" not in st.session_state.keys() or st.session_state["ChatPhase"] !
                 st.session_state.messages.append(Message)
                 st.session_state["ChatHistory"].append((LLMPrompt, Result['answer']))
 
-        st.session_state["ChatPhase"] = True
-        st.session_state["UI_Phase"] += 1
+        #st.session_state["ChatPhase"] = True
+        #st.session_state["UI_Phase"] += 1
         
