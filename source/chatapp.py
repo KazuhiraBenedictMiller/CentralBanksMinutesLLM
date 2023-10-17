@@ -82,7 +82,7 @@ def ETL_Pipeline(StartYear, EndYear):
         Response = requests.get(Complete_Link)
         Soup = BeautifulSoup(Response.text,"html.parser")
 
-        UL = Soup.find("ul", {"class": "list-articles"})
+        #UL = Soup.find("ul", {"class": "list-articles"})
         #As = UL.find_all("a") <- Not Working on Streamlit for Unknown Reasons
         As = Soup.select("ul[class=list-articles] > li > a")
                 
