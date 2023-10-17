@@ -114,7 +114,7 @@ def ETL_Pipeline(StartYear, EndYear):
                 
                 # 5) Loading Documents into the Vector Database
                 #LoadToVectorStore(SplittedText, Embeddings, st.session_state["VectorDBIndexName"])
-                VectorDB = Pinecone.from_documents(SplittedText, Embeddings, index_name = IndexName)
+                VectorDB = Pinecone.from_texts(SplittedText, Embeddings, index_name = st.session_state["VectorDBIndexName"])
 
         StartYear += 1
 
