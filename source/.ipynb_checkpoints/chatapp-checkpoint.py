@@ -131,6 +131,7 @@ def Init():
     st.session_state["YearsSelected"] = False
     st.session_state["IndexName"] = False
     st.session_state["FetchingPhase"] = False
+    st.session_state["ChatPhase"] = False
     
     st.session_state["VectorDBIndexName"] = ""
     
@@ -195,7 +196,6 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
         with st.spinner("Connecting to the VectorStore"):
             #Connecting to the VectorStore
             pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
-            
             ProgressBar.progress(10)
         
         with st.spinner("Creating the Vector Index"):
@@ -211,3 +211,19 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
             #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
             ETL_Pipeline(int(st.session_state["StartYear"]), int(st.session_state["EndYear"]))
             ProgressBar.progress(30)
+        
+        st.session_state["FetchingPhase"] = True
+        st.session_state["UI_Phase"] += 1
+        ProgressBar.empty()
+
+#Actually Fetching the Data
+if "ChatPhase" not in st.session_state.keys() or st.session_state["ChatPhase"] != True:    
+    if st.session_state["UI_Phase"] == 3:
+        
+        with st.spinner("Retrieving Data from the Vector Store"):
+            pass
+        
+        
+        st.session_state["ChatPhase"] = True
+        st.session_state["UI_Phase"] += 1
+        
