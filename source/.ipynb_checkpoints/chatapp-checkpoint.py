@@ -114,7 +114,8 @@ def ETL_Pipeline(StartYear, EndYear):
                 
                 # 5) Loading Documents into the Vector Database
                 #LoadToVectorStore(SplittedText, Embeddings, st.session_state["VectorDBIndexName"])
-                
+                VectorDB = Pinecone.from_documents(Text, Embeddings, index_name = IndexName)
+
         StartYear += 1
 
 def ClearChatHistory():
@@ -196,11 +197,11 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
         with st.spinner("Connecting to the VectorStore"):
             #Connecting to the VectorStore
             pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
-            ProgressBar.progress(10)
+            ProgressBar.progress(33)
         
         with st.spinner("Creating the Vector Index"):
-            #pinecone.create_index(st.session_state["VectorDBIndexName"], dimension=768)
-            ProgressBar.progress(20)
+            pinecone.create_index(st.session_state["VectorDBIndexName"], dimension=768)
+            ProgressBar.progress(66)
         
         #st.text(type(st.session_state["StartYear"]))
         #st.text(st.session_state["StartYear"])
@@ -210,7 +211,7 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
         with st.spinner("Fetching Data"):
             #Function to Fetch Data, Generate Embeddings and Load them into VectorStore
             ETL_Pipeline(int(st.session_state["StartYear"]), int(st.session_state["EndYear"]))
-            ProgressBar.progress(30)
+            ProgressBar.progress(100)
         
         st.session_state["FetchingPhase"] = True
         st.session_state["UI_Phase"] += 1
