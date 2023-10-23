@@ -285,6 +285,7 @@ if "ChatPhase" not in st.session_state.keys() or st.session_state["ChatPhase"] !
         if "messages" not in st.session_state.keys():
             st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
 
+            
         #Display or clear chat messages
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
