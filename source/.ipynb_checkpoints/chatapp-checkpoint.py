@@ -229,24 +229,28 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
 
 #Retrieving the Data from the Vector Store
 if "RetrievingPhase" not in st.session_state.keys() or st.session_state["RetrievingPhase"] != True:    
-    with st.spinner("Retrieving Data from the Vector Store"):
-        pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
-        
-        Embeddings = HuggingFaceEmbeddings()
-        st.session_state["VectorDB"] = Pinecone.from_existing_index(st.session_state["VectorDBIndexName"], Embeddings)
+    if st.session_state["UI_Phase"] == 3:
+        with st.spinner("Retrieving Data from the Vector Store"):
+            pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
+
+            Embeddings = HuggingFaceEmbeddings()
+            st.session_state["VectorDB"] = Pinecone.from_existing_index(st.session_state["VectorDBIndexName"], Embeddings)
         
         st.session_state["RetrievingPhase"] = True
+        st.session_state["UI_Phase"] += 1
                 
 #Building the LLM
 if "ModelPhase" not in st.session_state.keys() or st.session_state["ModelPhase"] != True:    
-    with st.spinner("Building the LLM Model"):
-        st.session_state["LLM"] = BuildModel(config.LLAMA2_13B, {"temperature":Temperature, "top_p":TopP, "max_length":MaxLength})
+    if st.session_state["UI_Phase"] == 4:
+        with st.spinner("Building the LLM Model"):
+            st.session_state["LLM"] = BuildModel(config.LLAMA2_13B, {"temperature":Temperature, "top_p":TopP, "max_length":MaxLength})
         
-        st.session_state["LLM"] = True
+        st.session_state["ModelPhase"] = True
+        st.session_state["UI_Phase"] += 1
         
 #Chatting Time
 if "ChatPhase" not in st.session_state.keys() or st.session_state["ChatPhase"] != True:    
-    if st.session_state["UI_Phase"] == 3:
+    if st.session_state["UI_Phase"] == 5:
         
         #Sidebar
         #Replicate Credentials
