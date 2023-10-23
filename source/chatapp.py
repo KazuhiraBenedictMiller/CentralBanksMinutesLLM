@@ -155,6 +155,7 @@ def BuildModel(Model, Params):
 def UpdateModel(Model, Params):
     LLM = Replicate(model = Model, model_kwargs = Params)
     st.session_state["LLM"] = LLM
+    ClearChatHistory()
     
 #App title
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
