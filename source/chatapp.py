@@ -242,6 +242,8 @@ if "ModelPhase" not in st.session_state.keys() or st.session_state["ModelPhase"]
     with st.spinner("Building the LLM Model"):
         st.session_state["LLM"] = BuildModel(config.LLAMA2_13B, {"temperature":Temperature, "top_p":TopP, "max_length":MaxLength})
         
+        st.session_state["LLM"] = True
+        
 #Chatting Time
 if "ChatPhase" not in st.session_state.keys() or st.session_state["ChatPhase"] != True:    
     if st.session_state["UI_Phase"] == 3:
