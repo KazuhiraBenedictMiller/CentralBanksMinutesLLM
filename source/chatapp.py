@@ -243,7 +243,7 @@ if "RetrievingPhase" not in st.session_state.keys() or st.session_state["Retriev
 if "ModelPhase" not in st.session_state.keys() or st.session_state["ModelPhase"] != True:    
     if st.session_state["UI_Phase"] == 4:
         with st.spinner("Building the LLM Model"):
-            st.session_state["LLM"] = BuildModel(config.LLAMA2_13B, {"temperature":Temperature, "top_p":TopP, "max_length":MaxLength})
+            st.session_state["LLM"] = BuildModel(config.LLAMA2_13B, {"temperature":0.75, "top_p":0.75, "max_length":3000})
         
         st.session_state["ModelPhase"] = True
         st.session_state["UI_Phase"] += 1
