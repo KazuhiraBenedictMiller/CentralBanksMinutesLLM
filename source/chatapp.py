@@ -132,10 +132,13 @@ def Init():
     st.session_state["YearsSelected"] = False
     st.session_state["IndexName"] = False
     st.session_state["FetchingPhase"] = False
+    st.session_state["RetrievingPhase"] = False
+    st.session_state["ModelPhase"] = False
     st.session_state["ChatPhase"] = False
     
     st.session_state["VectorDBIndexName"] = ""
     st.session_state["VectorDB"] = ""
+    st.session_state["LLM"] = ""
     
     st.session_state["StartYearRange"] = 2006
     st.session_state["EndYearRange"] = datetime.now().year
@@ -143,6 +146,12 @@ def Init():
     st.session_state["StartYear"] = 2006
     st.session_state["EndYear"] = 2006
         
+def BuildModel(Model, Params):
+    LLM = Replicate(model = Model, model_kwargs = Params)
+    
+    return LLM
+    
+    
 #App title
 st.set_page_config(page_title = "🦙💬 Llama 2 Chatbot to Chat with Reserve Bank of Australia's 🏦 Monetary Policy Meeting Minutes")
 st.title("🦙💬 Chat with RBA's 🏦 Monetary Policy Meeting Minutes")
@@ -173,7 +182,7 @@ if "YearsSelected" not in st.session_state.keys() or st.session_state["YearsSele
                 st.session_state["UI_Phase"] += 1
                 Placeholder.empty()
 
-#Naming the Index in the Feature Store
+#Naming the Index in the Vector Store
 if "IndexName" not in st.session_state.keys() or st.session_state["IndexName"] != True:    
     if st.session_state["UI_Phase"] == 1:
         Placeholder = st.empty() 
@@ -218,7 +227,22 @@ if "FetchingPhase" not in st.session_state.keys() or st.session_state["FetchingP
         st.session_state["UI_Phase"] += 1
         ProgressBar.empty()
 
-#Actually Fetching the Data
+#Retrieving the Data from the Vector Store
+if "RetrievingPhase" not in st.session_state.keys() or st.session_state["RetrievingPhase"] != True:    
+    with st.spinner("Retrieving Data from the Vector Store"):
+        pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
+        
+        Embeddings = HuggingFaceEmbeddings()
+        st.session_state["VectorDB"] = Pinecone.from_existing_index(st.session_state["VectorDBIndexName"], Embeddings)
+        
+        st.session_state["RetrievingPhase"] = True
+                
+#Building the LLM
+if "ModelPhase" not in st.session_state.keys() or st.session_state["ModelPhase"] != True:    
+    with st.spinner("Building the LLM Model"):
+        st.session_state["LLM"] = BuildModel(config.LLAMA2_13B, {"temperature":Temperature, "top_p":TopP, "max_length":MaxLength})
+        
+#Chatting Time
 if "ChatPhase" not in st.session_state.keys() or st.session_state["ChatPhase"] != True:    
     if st.session_state["UI_Phase"] == 3:
         
@@ -245,27 +269,18 @@ if "ChatPhase" not in st.session_state.keys() or st.session_state["ChatPhase"] !
                     st.success("Done, Proceed to entering your prompt message!", icon = "👉")
 
             os.environ['REPLICATE_API_TOKEN'] = Replicate_API
-
+            
             st.subheader("Adjust Parameters to your Needs 👇")
-
-            LLM = config.LLAMA2_13B
-
+            
             Temperature = st.sidebar.slider("Temperature - Higher -> More Creative", min_value = 0.01, max_value = 5.0, value = 0.75, step = 0.01)
             TopP = st.sidebar.slider("Top P - Higher -> More Different Words Used", min_value = 0.01, max_value = 1.0, value = 0.75, step = 0.01)
             MaxLength = st.sidebar.slider('Max Length', min_value = 10, max_value = 5000, value = 3000, step = 10)
-
+                        
+            st.sidebar.button("Modify Model Parameters", on_click = BuildModel(config.LLAMA2_13B, {"temperature":Temperature, "top_p":TopP, "max_length":MaxLength}))
             st.sidebar.button("Clear Chat History", on_click = ClearChatHistory)
-
+            
             st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
 
-        
-        with st.spinner("Retrieving Data from the Vector Store"):
-            pinecone.init(api_key = config.PINECONE_API_TOKEN, environment = config.PINECONE_ENVIRONMENT)
-            
-            Embeddings = HuggingFaceEmbeddings()
-            st.session_state["VectorDB"] = Pinecone.from_existing_index(st.session_state["VectorDBIndexName"], Embeddings)
-        
-        
             #Store LLM generated responses
         if "messages" not in st.session_state.keys():
             st.session_state.messages = [{"role": "Assistant", "content": "Welcome to a Llama 2 LLM Application to Chat with RBA's Monetary Policy Meeting Minutes. \nHow may I assist you today?"}]
@@ -274,10 +289,8 @@ if "ChatPhase" not in st.session_state.keys() or st.session_state["ChatPhase"] !
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
                 st.write(message["content"])
-
-        LLM = Replicate(model = config.LLAMA2_13B, model_kwargs = {"temperature": Temperature, "top_p": TopP, "max_length": MaxLength})
-
-        QA_Chain = ConversationalRetrievalChain.from_llm(LLM, st.session_state["VectorDB"].as_retriever(search_kwargs = {"k": 2}), return_source_documents = True)    
+        
+        QA_Chain = ConversationalRetrievalChain.from_llm(st.session_state["LLM"], st.session_state["VectorDB"].as_retriever(search_kwargs = {"k": 2}), return_source_documents = True)    
 
         PromptTemplate = "You are one of the best Financial Analyst in the World, if you don't know an answer simply say that you don't know and don't try to make it up."
 
