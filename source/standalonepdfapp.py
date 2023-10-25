@@ -36,9 +36,9 @@ if "Init" not in st.session_state.keys() or st.session_state["Init"] != True:
     Init()
 
 if st.session_state["UI_Phase"] == 0:   
-    #Placeholder = st.empty() 
+    Placeholder = st.empty() 
 
-    with st.empty():
+    with Placeholder.container():
         #File Uploader
         UploadedFiles = st.file_uploader("Upload your Documents in .pdf Format" , accept_multiple_files = True, type = ["pdf"])
 
@@ -48,7 +48,9 @@ if st.session_state["UI_Phase"] == 0:
         elif UploadedFiles:
             st.write(str(len(UploadedFiles)) + " Document(s) Loaded")
 
-        st.button("Chat!", on_click = AdvancePhase)
+        if st.button("Chat!"):
+            Placeholder.empty()
+            AdvancePhase()
 
 if st.session_state["UI_Phase"] == 1:    
     for x in UploadedFiles:
