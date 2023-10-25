@@ -287,7 +287,7 @@ if "ChatPhase" not in st.session_state.keys() or st.session_state["ChatPhase"] !
             TopP = st.sidebar.slider("Top P - Higher -> More Different Words Used", min_value = 0.01, max_value = 1.0, value = 0.75, step = 0.01)
             MaxLength = st.sidebar.slider('Max Length', min_value = 10, max_value = 5000, value = 3000, step = 10)
                         
-            #st.sidebar.button("Modify Model Parameters", on_click = UpdateModel(config.LLAMA2_13B, {"temperature":Temperature, "top_p":TopP, "max_length":MaxLength}))
+            st.sidebar.button("Modify Model Parameters", on_click = UpdateModel(config.LLAMA2_13B, {"temperature":Temperature, "top_p":TopP, "max_length":MaxLength}))
             st.sidebar.button("Clear Chat History", on_click = ClearChatHistory)
             
             st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
