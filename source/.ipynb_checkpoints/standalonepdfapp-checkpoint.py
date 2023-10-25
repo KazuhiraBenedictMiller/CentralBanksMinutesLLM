@@ -33,15 +33,18 @@ if "Init" not in st.session_state.keys() or st.session_state["Init"] != True:
     Init()
 
 if st.session_state["UI_Phase"] == 0:   
-    #File Uploader
-    UploadedFiles = st.file_uploader("Upload your Documents in .pdf Format" , accept_multiple_files = True, type = ["pdf"])
+    with st.empty():
+        #File Uploader
+        UploadedFiles = st.file_uploader("Upload your Documents in .pdf Format" , accept_multiple_files = True, type = ["pdf"])
 
-    if UploadedFiles is None:
-        st.info("Upload Files to Chat With")
+        if UploadedFiles is None:
+            st.info("Upload Files to Chat With")
 
-    elif UploadedFiles:
-        st.write(str(len(UploadedFiles)) + " Document(s) Loaded")
-        st.session_state["UI_Phase"] += 1
+        elif UploadedFiles:
+            st.write(str(len(UploadedFiles)) + " Document(s) Loaded")
+
+        if st.button("Chat!"):
+            st.session_state["UI_Phase"] += 1
 
 if st.session_state["UI_Phase"] == 1:    
     for x in UploadedFiles:
