@@ -53,6 +53,9 @@ if st.session_state["UI_Phase"] == 0:
             AdvancePhase()
 
 if st.session_state["UI_Phase"] == 1:    
+    
+    st.text(UploadedFiles)
+    '''
     for x in UploadedFiles:
         Loader = PyPDFLoader(x)
         Document = Loader.load()
@@ -65,7 +68,7 @@ if st.session_state["UI_Phase"] == 1:
         IndexName = "pdfsllm"
         Index = pinecone.Index(IndexName)
         VectorDB = Pinecone.from_documents(Text, Embeddings, index_name = IndexName)
-
+'''
         
         
 '''
