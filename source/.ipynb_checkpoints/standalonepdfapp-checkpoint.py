@@ -25,6 +25,9 @@ def Init():
     st.session_state["UI_Phase"] = 0
     st.session_state["Init"] = True
 
+def AdvancePhase():
+    st.session_state["UI_Phase"] += 1
+    
 st.set_page_config(layout = "centered", page_title = "Chat with 1 or More PDFs")
 st.header("Multidoc QnA")
 
@@ -43,8 +46,7 @@ if st.session_state["UI_Phase"] == 0:
         elif UploadedFiles:
             st.write(str(len(UploadedFiles)) + " Document(s) Loaded")
 
-        if st.button("Chat!"):
-            st.session_state["UI_Phase"] += 1
+        st.button("Chat!", on_click = AdvancePhase):
 
 if st.session_state["UI_Phase"] == 1:    
     for x in UploadedFiles:
